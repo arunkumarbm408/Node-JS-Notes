@@ -1,0 +1,2 @@
+Hello i am input text file
+This is extra line
