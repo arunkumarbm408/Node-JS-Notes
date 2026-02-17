@@ -73,9 +73,71 @@ app.get('/students',(req,res)=>{
     //fs readfile
     //res.json
     const data=fs.readFileSync("./data/students.json","utf-8");
-    // let resp=JSON.parse(data)
-    res.json(data)
+    let resp=JSON.parse(data)
+    res.json(resp)
 })
+
+app.get('/student/:id',(req,res)=>{
+    // let data=
+    let studentId= req.params.id
+    console.log(studentId)
+    let data=fs.readFileSync("./data/students.json", "utf-8")
+    let studentsData= JSON.parse(data);
+
+    const student=studentsData.find(s=> s.id == studentId)
+    res.json(student)
+    
+})
+
+
+//
+app.put('/student/:id',(req,res)=>{
+    const studentId=req.params.id
+    // console.log(studentId)
+    const {name,course}=req.body
+
+    const students= fs.readFileSync("./data/students.json","utf-8")
+    const studentsData= JSON.parse(students)
+    
+    console.log(studentsData)
+    let index= studentsData.findIndex(s=> s.id== studentId)
+
+console.log("index value is", index)
+    studentsData[index] ={ id :studentId,name,course }
+    console.log(studentsData)
+    //studentData[5]={}
+    fs.writeFileSync("./data/students.json", JSON.stringify(studentsData))
+
+  res.status(200).json({
+    message:"student list updated"
+  })
+})
+
+//patch
+app.patch("/student/:id",(req,res)=>{
+    const studentId=req.params.id
+    const updateData=req.body
+
+    const studentsList= JSON.parse(fs.readFileSync("./data/students.json", "utf-8"))
+
+    const student=studentsList.find(s=> s.id==studentId)
+
+    // console.log(student)
+
+    Object.assign(student,updateData)
+
+    // console.log(student)
+    // console.log(studentsList)
+    fs.writeFileSync("./data/students.json", JSON.stringify(studentsList))
+
+    res.status(200).json({
+        message:"student updated by patch"
+    })
+
+})
+
+//delete
+
 
 app.listen(4000,()=>{
     console.log("server is running on port 4000")
