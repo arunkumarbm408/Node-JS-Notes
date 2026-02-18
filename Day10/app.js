@@ -1,9 +1,24 @@
 const express=require("express");
+const morgan=require("morgan");
+require('dotenv').config()
 const app=express();
+const os= require("os")
 
-
+console.log(process.env.NODE_ENV)
 app.use(express.json())// builtin middleware
 
+if(process.env.NODE_ENV== "development"){
+app.use(morgan("dev"))
+}
+
+console.log("platform",os.platform())
+console.log("type", os.type())
+console.log(os.arch())
+console.log(os.hostname())
+console.log(os.totalmem())
+console.log(os.freemem())
+console.log(os.cpus().length)//
+console.log(os.userInfo())
 //application middleware
 const myMiddleware= (req,res,next)=>{
 console.log("Middleware called");
@@ -44,7 +59,7 @@ app.use((err,req,res,next)=>{
     console.log(err.message)
     res.status(400).send("something went wrong")
 })
-app.listen(6000,()=>{
+app.listen(process.env.PORT,()=>{
     console.log("Sever started in the PORT of 6000")
 })
 
