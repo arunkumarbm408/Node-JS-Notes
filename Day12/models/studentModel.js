@@ -6,17 +6,17 @@ const mongoose= require("mongoose");
         type : String,
         required: true
     },
-    course:{
-        type : String,
-        required :true,
-    },
     email :{
         type : String,
         required:true
     },
+    password:{
+     type:String,
+     required: true
+    },
     isActive :{
         type : Boolean,
-        default : false
+        default : true
     }
 }, {timestamps:true});
 
