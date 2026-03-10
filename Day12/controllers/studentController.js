@@ -14,3 +14,18 @@ try {
     })
 }
 }
+
+exports.getStudentById= async(req,res)=>{
+    try {
+        let id= req.params.id;
+         console.log(id);
+         const studentData=await studentModel.findById(id);
+         console.log(studentData)
+         res.status(200).json({
+            message: "Data fetched",
+            data: studentData
+         })
+    } catch (error) {
+        console.log("Error occuerrde while getiing student", error)
+    }
+}
