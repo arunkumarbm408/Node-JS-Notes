@@ -1,5 +1,6 @@
 const studentModel = require("../models/studentModel")
-const bcrypt= require("bcrypt")
+const bcrypt= require("bcrypt");
+const jwt= require("jsonwebtoken")
 
 
 exports.createStudent = async(req,res)=>{
@@ -54,6 +55,31 @@ exports.signupStudent= async (req,res)=>{
        res.json({
         message:"Student registed",
        })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+exports.loginStudent= async(req,res)=>{
+    try {
+        const {email,password}=req.body;
+        const student=await studentModel.findOne({email});
+
+        if(!student){
+            return res.status(400).json({message:"student is not found please do signup"})
+        }
+
+        const matched=await bcrypt.compare(password, student.password);
+       
+        if(!matched){
+            return res.status(400).json({message:"password is incorrct"})
+        }
+         const token=jwt.sign({id:student._id, email:student.email},"abcd",{expiresIn:"1h"})
+   res.status(200).json({
+    messgae:"success",
+    jstoken:token
+   })
+
     } catch (error) {
         console.error(error)
     }
